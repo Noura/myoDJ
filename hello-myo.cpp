@@ -17,7 +17,7 @@
 class DataCollector : public myo::DeviceListener {
 public:
     DataCollector()
-    : onArm(false), roll_w(0), pitch_w(0), yaw_w(0), currentPose()
+    : onArm(false), roll_w(0), pitch_w(0), yaw_w(0), currentPose(), my_pitch(0)
     {
     }
 
@@ -29,6 +29,7 @@ public:
         roll_w = 0;
         pitch_w = 0;
         yaw_w = 0;
+        my_pitch = 0;
         onArm = false;
     }
 
@@ -53,6 +54,8 @@ public:
         roll_w = static_cast<int>((roll + (float)M_PI)/(M_PI * 2.0f) * 18);
         pitch_w = static_cast<int>((pitch + (float)M_PI/2.0f)/M_PI * 18);
         yaw_w = static_cast<int>((yaw + (float)M_PI)/(M_PI * 2.0f) * 18);
+      
+        my_pitch = 50 - static_cast<int>((pitch + (float)M_PI/2.0f)/M_PI * 100);
     }
 
     // onPose() is called whenever the Myo detects that the person wearing it has changed their pose, for example,
@@ -60,11 +63,14 @@ public:
     void onPose(myo::Myo* myo, uint64_t timestamp, myo::Pose pose)
     {
         currentPose = pose;
-
+        std::string poseString = currentPose.toString();
+      
+        std::cout << poseString << std::endl;
         // Vibrate the Myo whenever we've detected that the user has made a fist.
+        /* vibrations are annoying
         if (pose == myo::Pose::fist) {
-            myo->vibrate(myo::Myo::vibrationMedium);
-        }
+          myo->vibrate(myo::Myo::vibrationMedium);
+        }*/
     }
 
     // onArmRecognized() is called whenever Myo has recognized a Sync Gesture after someone has put it on their
@@ -89,6 +95,7 @@ public:
     // We define this function to print the current values that were updated by the on...() functions above.
     void print()
     {
+      /*
         // Clear the current line
         std::cout << '\r';
 
@@ -113,6 +120,9 @@ public:
         }
 
         std::cout << std::flush;
+       */
+      
+       std::cout << my_pitch << std::endl;
     }
 
     // These values are set by onArmRecognized() and onArmLost() above.
@@ -121,6 +131,7 @@ public:
 
     // These values are set by onOrientationData() and onPose() above.
     int roll_w, pitch_w, yaw_w;
+    int my_pitch;
     myo::Pose currentPose;
 };
 
