@@ -66,6 +66,20 @@ public:
         std::string poseString = currentPose.toString();
       
         std::cout << poseString << std::endl;
+      
+      if (pose == myo::Pose::fist) {
+        
+        
+      } else if (pose == myo::Pose::waveOut) {
+        
+        
+      } else if (pose == myo::Pose::waveIn) {
+        
+      } else if (pose == myo::Pose::fingersSpread) {
+        
+      } else if (pose == myo::Pose::thumbToPinky) {
+        
+      }
         // Vibrate the Myo whenever we've detected that the user has made a fist.
         /* vibrations are annoying
         if (pose == myo::Pose::fist) {
