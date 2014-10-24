@@ -1,3 +1,10 @@
 PortAudio
 In MAC: system("afplay sound.wav");
 In Windows: PlaySound
+
+http://xiph.org/ao/doc/overview.html
+http://www.thefreesite.com/Free_Sounds/Free_WAVs/
+http://jackaudio.org/api/
+http://www.libsdl.org/projects/SDL_mixer/docs/index.html
+http://www.un4seen.com/
+
