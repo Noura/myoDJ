@@ -68,13 +68,12 @@ public:
         std::cout << poseString << std::endl;
       
       if (pose == myo::Pose::fist) {
-        
+        system("afplay /Users/noura/myoDJ/media/buzzer_x.wav");
         
       } else if (pose == myo::Pose::waveOut) {
-        
-        
+        system("afplay /Users/noura/myoDJ/media/Deep-Kick.wav");
       } else if (pose == myo::Pose::waveIn) {
-        
+        system("afplay /Users/noura/myoDJ/media/Electric-Bass-Low-G-Staccato.wav");
       } else if (pose == myo::Pose::fingersSpread) {
         
       } else if (pose == myo::Pose::thumbToPinky) {
