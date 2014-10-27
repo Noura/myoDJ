@@ -55,7 +55,12 @@ int main(int argc, char** argv)
 {
 	cout << "Loading wave file" << endl;
 
-	ifstream file("..\\..\\media\\this_is_dj_simon.wave", ios::binary);
+	ifstream file("D:\\Programming\\dj_gestures\\myoDJ\\media\\this_is_dj_simon.wav", ios::binary);
+
+	if(file.good())
+		cout << "File loaded." << endl;
+	else
+		cout << "File load FAILED." << endl;
 
 	if (file.good())
 	{
@@ -76,6 +81,9 @@ int main(int argc, char** argv)
 		file.read(reinterpret_cast<char*>(waveFile.Data), sizeof(waveFile.SubChunk2Size));
 		file.close();
 	}
+
+	// Print size of audio data
+	cout << "Data section is " << waveFile.SubChunk2Size << "bytes." << endl;
 
 	system("pause");
 	return 0;
