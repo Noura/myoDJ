@@ -1,12 +1,49 @@
-// playWave.cpp : Defines the entry point for the console application.
-//
+/** @file paex_sine.c
+	@ingroup examples_src
+	@brief Play a sine wave for several seconds.
+	@author Ross Bencina <rossb@audiomulch.com>
+    @author Phil Burk <philburk@softsynth.com>
+*/
+/*
+ * $Id: paex_sine.c 1752 2011-09-08 03:21:55Z philburk $
+ *
+ * This program uses the PortAudio Portable Audio Library.
+ * For more information see: http://www.portaudio.com/
+ * Copyright (c) 1999-2000 Ross Bencina and Phil Burk
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files
+ * (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge,
+ * publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+ * ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
-#include <iostream>
-#include <iostream>
-#include <fstream>
+/*
+ * The text above constitutes the entire PortAudio license; however, 
+ * the PortAudio community also makes the following non-binding requests:
+ *
+ * Any person wishing to distribute modifications to the Software is
+ * requested to send the modifications to the original developer so that
+ * they can be incorporated into the canonical version. It is also 
+ * requested that these non-binding requests be included along with the 
+ * license above.
+ */
+#include <stdio.h>
+#include <math.h>
 #include "portaudio.h"
-
-using namespace std;
 
 #define NUM_SECONDS   (5)
 #define SAMPLE_RATE   (44100)
@@ -16,84 +53,20 @@ using namespace std;
 #define M_PI  (3.14159265)
 #endif
 
-
-// Structure to hold the wavefile
-struct WaveFile
-{
-public:
-
-    static const unsigned short NUM_CHARS = 4;
-
-public:
-
-    WaveFile() : Data(nullptr) {}
-    ~WaveFile() { delete[] Data; }
-
-    char ChunkID[NUM_CHARS];
-    unsigned int ChunkSize;
-    char Format[NUM_CHARS];
-    char SubChunkID[NUM_CHARS];
-    unsigned int SubChunkSize;
-    unsigned short AudioFormat;
-    unsigned short NumChannels;
-    unsigned int SampleRate;
-    unsigned int ByteRate;
-    unsigned short BlockAlign;
-    unsigned short BitsPerSample;
-    char SubChunk2ID[NUM_CHARS];
-    unsigned int SubChunk2Size;
-    unsigned char* Data; 
-};
-
+#define TABLE_SIZE   (200)
 
 class Sine
 {
 public:
-    PaStream *stream;
-    WaveFile waveFile;
-    unsigned int sample_count;
-    char message[20];
-
-	Sine()
+    Sine() : stream(0), left_phase(0), right_phase(0)
     {
-		stream = 0;
-		sample_count = 0;
+        /* initialise sinusoidal wavetable */
+        for( int i=0; i<TABLE_SIZE; i++ )
+        {
+            sine[i] = (float) sin( ((double)i/(double)TABLE_SIZE) * M_PI * 2. );
+        }
 
-		cout << "Loading wave file" << endl;
-		ifstream file("D:\\Programming\\dj_gestures\\myoDJ\\media\\this_is_dj_simon.wav", ios::binary);
-
-		if(file.good())
-			cout << "File loaded." << endl;
-		else
-			cout << "File load FAILED." << endl;
-
-		if (file.good())
-		{
-			file.read(waveFile.ChunkID, WaveFile::NUM_CHARS);
-			file.read(reinterpret_cast<char*>(&waveFile.ChunkSize), sizeof(unsigned int));
-			file.read(waveFile.Format, WaveFile::NUM_CHARS);
-			file.read(waveFile.SubChunkID, WaveFile::NUM_CHARS);
-			file.read(reinterpret_cast<char*>(&waveFile.SubChunkSize), sizeof(unsigned int));
-			file.read(reinterpret_cast<char*>(&waveFile.AudioFormat), sizeof(unsigned short));
-			file.read(reinterpret_cast<char*>(&waveFile.NumChannels), sizeof(unsigned short));
-			file.read(reinterpret_cast<char*>(&waveFile.SampleRate), sizeof(unsigned int));
-			file.read(reinterpret_cast<char*>(&waveFile.ByteRate), sizeof(unsigned int));
-			file.read(reinterpret_cast<char*>(&waveFile.BlockAlign), sizeof(unsigned short));
-			file.read(reinterpret_cast<char*>(&waveFile.BitsPerSample), sizeof(unsigned short));
-			file.read(waveFile.SubChunk2ID, WaveFile::NUM_CHARS);
-			file.read(reinterpret_cast<char*>(&waveFile.SubChunk2Size), sizeof(unsigned int));
-			waveFile.Data = new unsigned char[waveFile.SubChunk2Size];
-			file.read(reinterpret_cast<char*>(waveFile.Data), sizeof(waveFile.SubChunk2Size));
-			file.close();
-		}
-
-		// Print size of audio data
-	    cout << "Num chan: " << waveFile.NumChannels << "Samp Rate: " << waveFile.SampleRate << endl;
-		cout << "Data section is " << waveFile.SubChunk2Size << "bytes." << endl;
-
-		for(int i = 0; i < 1000; i++)
-			cout << reinterpret_cast<short*>(waveFile.Data)[i] << endl;
-
+        sprintf( message, "No Message" );
     }
 
     bool open(PaDeviceIndex index)
@@ -106,7 +79,7 @@ public:
         }
 
         outputParameters.channelCount = 2;       /* stereo output */
-        outputParameters.sampleFormat = paFloat32; /* 16 bit int output */
+        outputParameters.sampleFormat = paFloat32; /* 32 bit floating point output */
         outputParameters.suggestedLatency = Pa_GetDeviceInfo( outputParameters.device )->defaultLowOutputLatency;
         outputParameters.hostApiSpecificStreamInfo = NULL;
 
@@ -173,7 +146,6 @@ public:
     }
 
 private:
-
     /* The instance callback, where we have access to every method/variable in object of class Sine */
     int paCallbackMethod(const void *inputBuffer, void *outputBuffer,
         unsigned long framesPerBuffer,
@@ -189,14 +161,12 @@ private:
 
         for( i=0; i<framesPerBuffer; i++ )
         {
-            //*out++ = static_cast <float> (rand()) / static_cast <float> (RAND_MAX); //((short*)waveFile.Data)[sample_count];
-            //*out++ = static_cast <float> (rand()) / static_cast <float> (RAND_MAX); //((short*)waveFile.Data)[sample_count];
-
-            *out++ = (float) ( ((short*)waveFile.Data)[sample_count] );
-            *out++ = (float) ( ((short*)waveFile.Data)[sample_count] );
-
-			sample_count++;
-            if( sample_count >= waveFile.SubChunk2Size/2 ) sample_count = 0;
+            *out++ = sine[left_phase];  /* left */
+            *out++ = sine[right_phase];  /* right */
+            left_phase += 1;
+            if( left_phase >= TABLE_SIZE ) left_phase -= TABLE_SIZE;
+            right_phase += 3; /* higher pitch so we can distinguish left and right. */
+            if( right_phase >= TABLE_SIZE ) right_phase -= TABLE_SIZE;
         }
 
         return paContinue;
@@ -235,10 +205,16 @@ private:
         return ((Sine*)userData)->paStreamFinishedMethod();
     }
 
+    PaStream *stream;
+    float sine[TABLE_SIZE];
+    int left_phase;
+    int right_phase;
+    char message[20];
 };
 
 
 /*******************************************************************/
+int main(void);
 int main(void)
 {
     PaError err;
@@ -274,4 +250,3 @@ error:
     fprintf( stderr, "Error message: %s\n", Pa_GetErrorText( err ) );
     return err;
 }
-
