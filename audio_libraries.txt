@@ -8,3 +8,5 @@ http://jackaudio.org/api/
 http://www.libsdl.org/projects/SDL_mixer/docs/index.html
 http://www.un4seen.com/
 
+https://github.com/asantoni/libaudiodecoder/tree/master/examples/playsong
+
