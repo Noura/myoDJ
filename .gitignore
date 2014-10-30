@@ -5,3 +5,4 @@ hello-myo.xcodeproj/*
 *.sdf
 *.opensdf
 x64/*
+BeatWave/*
