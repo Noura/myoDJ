@@ -149,21 +149,24 @@ int audioCallback(const void *input, void *output,
     
     AudioDecoder* pAudioDecoder = static_cast<AudioDecoder*>(userData);
     
+	// Temporary buffer to store samples
+	SAMPLE* sampBuf = new SAMPLE[frameCount * NUM_CHANNELS];
+
     // Play it safe when debugging and coding, protect your ears by clearing
     // the output buffer.
-    memset(output, 0, frameCount * NUM_CHANNELS * sizeof(float));
+    memset(sampBuf, 0, frameCount * NUM_CHANNELS * sizeof(float));
     
-    // Decode the number of samples that PortAudio said it needs to send to the 
-    // soundcard. This is where we're grabbing audio from demo.mp3!
-    int samplesRead = pAudioDecoder->read(frameCount * NUM_CHANNELS, 
-                                          static_cast<SAMPLE*>(output));
+    // Decode the number of samples that PortAudio said it needs and
+	// write it to the temporary buffer
+    int samplesRead = pAudioDecoder->read(frameCount * NUM_CHANNELS, static_cast<SAMPLE*>(sampBuf));
 
-	// Make it much softer
+	// Do some audio processing on the samples. In this case, just adjust
+	// the volume.
+	// The result of the processing is written directly to the output buffer
+	float vol = 1.0;
 	for(int i = 0; i <  samplesRead; i++)
 	{
-		SAMPLE new_samp = static_cast<SAMPLE*>(output)[i];
-		new_samp = new_samp * 0.01;
-		static_cast<SAMPLE*>(output)[i] = new_samp;
+		static_cast<SAMPLE*>(output)[i] = sampBuf[i] * vol;
 	}
 
     // IMPORTANT:
@@ -187,5 +190,6 @@ int audioCallback(const void *input, void *output,
     // more detail here:
     // http://www.rossbencina.com/code/real-time-audio-programming-101-time-waits-for-nothing
     
+	delete sampBuf;
     return paContinue;
 }
