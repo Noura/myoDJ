@@ -40,11 +40,15 @@
  */
 
 #ifdef _WIN32
-#include <windows.h>
+  #include <windows.h>
 #endif
 #include <iostream>
 #include <audiodecoder/audiodecoder.h> // libaudiodecoder
-#include <portaudio.h>                 // PortAudio
+#ifdef _WIN32
+  #include <portaudio.h>                 // PortAudio
+#else
+  #include "portaudio.h"
+#endif
 
 // All audio will be handled as stereo.
 const int NUM_CHANNELS = 2;
@@ -63,7 +67,7 @@ int main (int argc, char * const argv[]) {
     #ifdef _WIN32
 		char* filename = "demo.mp3";
 	#else
-		std::string filename = "demo.mp3";
+		std::string filename = "/Users/noura/myo DJ/playsong/demo.mp3";
 	#endif
     AudioDecoder* pAudioDecoder = new AudioDecoder(filename);
     
