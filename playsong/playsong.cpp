@@ -67,7 +67,7 @@ int main (int argc, char * const argv[]) {
     #ifdef _WIN32
 		char* filename = "demo.mp3";
 	#else
-		std::string filename = "/Users/noura/myo DJ/playsong/demo.mp3";
+		std::string filename = "/Users/noura/myoDJ/playsong/demo.mp3";
 	#endif
     AudioDecoder* pAudioDecoder = new AudioDecoder(filename);
     
