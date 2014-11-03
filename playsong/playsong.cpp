@@ -43,11 +43,12 @@
   #include <windows.h>
 #endif
 #include <iostream>
-#include <audiodecoder/audiodecoder.h> // libaudiodecoder
 #ifdef _WIN32
   #include <portaudio.h>                 // PortAudio
+  #include <audiodecoder.h> // libaudiodecoder
 #else
   #include "portaudio.h"
+  #include <audiodecoder/audiodecoder.h> // libaudiodecoder
 #endif
 
 // All audio will be handled as stereo.
