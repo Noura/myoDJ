@@ -11,7 +11,6 @@
 // The only file that needs to be included to use the Myo C++ SDK is myo.hpp.
 //#include <myo/myo.hpp>
 
-/*
 // Classes that inherit from myo::DeviceListener can be used to receive events from Myo devices. DeviceListener
 // provides several virtual functions for handling different kinds of events. If you do not override an event, the
 // default behavior is to do nothing.
@@ -85,7 +84,7 @@ public:
         if (pose == myo::Pose::fist) {
           myo->vibrate(myo::Myo::vibrationMedium);
         }*/
-/*    }
+    }
 
     // onArmRecognized() is called whenever Myo has recognized a Sync Gesture after someone has put it on their
     // arm. This lets Myo know which arm it's on and which way it's facing.
@@ -109,7 +108,6 @@ public:
     // We define this function to print the current values that were updated by the on...() functions above.
     void print()
     {
-      /*
         // Clear the current line
         std::cout << '\r';
 
@@ -134,9 +132,9 @@ public:
         }
 
         std::cout << std::flush;
-       */
+
       
-/*       std::cout << my_pitch << std::endl;
+        std::cout << my_pitch << std::endl;
     }
 
     // These values are set by onArmRecognized() and onArmLost() above.
@@ -147,12 +145,11 @@ public:
     int roll_w, pitch_w, yaw_w;
     int my_pitch;
     myo::Pose currentPose;
-};*/
+};
 
 int main(int argc, char** argv)
 {
     std::cout << "hey this is main" << std::endl;
-    /*
     // We catch any exceptions that might occur below -- see the catch statement for more details.
     try {
 
@@ -199,5 +196,5 @@ int main(int argc, char** argv)
         std::cerr << "Press enter to continue.";
         std::cin.ignore();
         return 1;
-    }*/
+    }
 }

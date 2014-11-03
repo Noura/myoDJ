@@ -51,6 +51,13 @@
   #include <audiodecoder/audiodecoder.h> // libaudiodecoder
 #endif
 
+#include <myo/myo.hpp>
+
+#include "myo.h"
+
+#define MAX(a, b) ( (a) > (b) ? a : b)
+#define MIN(a, b) ( (a) < (b) ? a : b)
+
 // All audio will be handled as stereo.
 const int NUM_CHANNELS = 2;
 
@@ -61,6 +68,8 @@ int audioCallback(const void *input, void *output,
                   PaStreamCallbackFlags statusFlags,
                   void* userData);
 
+// Next we construct an instance of our DeviceListener, so that we can register it with the Hub.
+DataCollector collector;
 
 int main (int argc, char * const argv[]) {
 
@@ -68,7 +77,7 @@ int main (int argc, char * const argv[]) {
     #ifdef _WIN32
 		char* filename = "demo.mp3";
 	#else
-		std::string filename = "/Users/noura/myo DJ/playsong/demo.mp3";
+		std::string filename = "../../../robyn_dancing.m4a";
 	#endif
     AudioDecoder* pAudioDecoder = new AudioDecoder(filename);
     
@@ -107,18 +116,54 @@ int main (int argc, char * const argv[]) {
     {
         std::cerr << "Failed to start the PortAudio stream." << std::endl;
         return 1;
-    }        
-            
-    // So here's where control would normally go back to your program, probably
-    // your GUI thread. The audio will be decoded and played back in a separate thread
-    // (managed by PortAudio) via the callback function we've defined below.
-    // Since we have no GUI to in this example, we're just going to sleep here
-    // for a while.
-#ifdef _WIN32
-	Sleep(20000);
-#else
-    sleep(20);
-#endif
+    }
+    
+    // START OF MYO CODE //////////////////////////////////////////////////////////
+    std::cout << "hey this is main" << std::endl;
+    // We catch any exceptions that might occur below -- see the catch statement for more details.
+    try {
+        
+        // First, we create a Hub with our application identifier. Be sure not to use the com.example namespace when
+        // publishing your application. The Hub provides access to one or more Myos.
+        myo::Hub hub("com.example.hello-myo");
+        
+        std::cout << "Attempting to find a Myo..." << std::endl;
+        
+        // Next, we attempt to find a Myo to use. If a Myo is already paired in Myo Connect, this will return that Myo
+        // immediately.
+        // waitForAnyMyo() takes a timeout value in milliseconds. In this case we will try to find a Myo for 10 seconds, and
+        // if that fails, the function will return a null pointer.
+        myo::Myo* myo = hub.waitForMyo(10000);
+        
+        // If waitForAnyMyo() returned a null pointer, we failed to find a Myo, so exit with an error message.
+        if (!myo) {
+            throw std::runtime_error("Unable to find a Myo!");
+        }
+        
+        // We've found a Myo.
+        std::cout << "Connected to a Myo armband!" << std::endl << std::endl;
+        
+        // Hub::addListener() takes the address of any object whose class inherits from DeviceListener, and will cause
+        // Hub::run() to send events to all registered device listeners.
+        hub.addListener(&collector);
+        
+        // Finally we enter our main loop.
+        while (1) {
+            // In each iteration of our main loop, we run the Myo event loop for a set number of milliseconds.
+            // In this case, we wish to update our display 20 times a second, so we run for 1000/20 milliseconds.
+            hub.run(1000/20);
+            // After processing events, we call the print() member function we defined above to print out the values we've
+            // obtained from any events that have occurred.
+            collector.print();
+        }
+        
+        // If a standard exception occurred, we print out its message and exit.
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        std::cerr << "Press enter to continue.";
+        std::cin.ignore();
+        return 1;
+    } // END OF MYO CODE //////////////////////////////////////////
     
     // Shutdown:
     // First, stop the PortAudio stream (closes the soundcard device).
@@ -168,10 +213,17 @@ int audioCallback(const void *input, void *output,
 	// Do some audio processing on the samples. In this case, just adjust
 	// the volume.
 	// The result of the processing is written directly to the output buffer
-	float vol = 1.0;
+    float vol = MAX(collector.my_pitch / 50.0, 0.0);
+    float distort = MAX(collector.my_yaw / 5.0, 0.0);
+    float delay_vol = MAX(collector.my_roll / 20.0, 0.0);
+
 	for(int i = 0; i <  samplesRead; i++)
 	{
-		static_cast<SAMPLE*>(output)[i] = sampBuf[i] * vol;
+        if (i < 100) {
+            static_cast<SAMPLE*>(output)[i] = sampBuf[i] * vol;
+        } else {
+            static_cast<SAMPLE*>(output)[i] = ((1.0 - delay_vol) * sampBuf[i] + delay_vol * sampBuf[i-100]) * vol;
+        }
 	}
 
     // IMPORTANT:
