@@ -54,7 +54,10 @@
 #endif
 
 #include <myo/myo.hpp>
-#include "myo.h"
+#include "../myo.h"
+
+#define MIN(a, b) ( a < b ? a : b)
+
 
 // All audio will be handled as stereo.
 const int NUM_CHANNELS = 2;
@@ -91,7 +94,7 @@ int main (int argc, char * const argv[]) {
     #ifdef _WIN32
 		char* filename = "dancing.m4a";
 	#else
-		std::string filename = "/Users/noura/myo DJ/playsong/demo.mp3";
+        std::string filename = "../../../robyn_call_your_girlfriend.m4a";
 	#endif
     AudioDecoder* pAudioDecoder = new AudioDecoder(filename);
     
@@ -165,7 +168,7 @@ int main (int argc, char * const argv[]) {
 		if(cbuf.nElems < cbuf.len)
 		{
 			int sampsToRead = cbuf.len - cbuf.nElems;
-			int sampsToRead1 = min(sampsToRead, cbuf.len - cbuf.writePos);
+			int sampsToRead1 = MIN(sampsToRead, cbuf.len - cbuf.writePos);
 
 			numSampsRead = pAudioDecoder->read(sampsToRead1, static_cast<SAMPLE*>(&cbuf.data[cbuf.writePos]));
 			cbuf.nElems += numSampsRead;
@@ -193,6 +196,13 @@ int main (int argc, char * const argv[]) {
         // After processing events, we call the print() member function we defined above to print out the values we've
         // obtained from any events that have occurred.
         collector.print();
+		
+		// Sleep for a bit
+		#ifdef _WIN32
+			Sleep(1);
+		#else
+			sleep(0.001);
+		#endif
 	}
    
     // Shutdown:
@@ -201,7 +211,7 @@ int main (int argc, char * const argv[]) {
     {
         std::cerr << "Failed to stop the PortAudio stream." << std::endl;
         return 1;
-    }        
+    }
 
     // Tell the PortAudio library that we're all done with it.
     if (Pa_Terminate() != paNoError)

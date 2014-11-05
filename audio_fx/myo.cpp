@@ -58,6 +58,9 @@ void DataCollector::onOrientationData(myo::Myo* myo, uint64_t timestamp, const m
   
     my_pitch = 50 - static_cast<int>((pitch + (float)M_PI/2.0f)/M_PI * 100);
     my_yaw = static_cast<int>((yaw + (float)M_PI)/(M_PI * 2.0f) * 100) - 50;
+	if(my_yaw < 0)
+		my_yaw += 100;
+	my_yaw -= 40;
     my_roll = static_cast<int>((roll + (float)M_PI)/(M_PI * 2.0f) * 100) - 50;
 }
 
@@ -69,7 +72,7 @@ void DataCollector::onPose(myo::Myo* myo, uint64_t timestamp, myo::Pose pose)
     std::string poseString = currentPose.toString();
   
     std::cout << poseString << std::endl;
-
+    return; // do not want gestures
   if (pose == myo::Pose::fist) {
     system("afplay /Users/noura/myoDJ/media/buzzer_x.wav &");
     
