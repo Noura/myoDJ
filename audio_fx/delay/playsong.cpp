@@ -106,7 +106,9 @@ int main (int argc, char * const argv[]) {
     
     // delay effect setup
     //Delay_Init(85.6,0.7,0.7,1);
-    Delay_Init(22500.0, 0.7, 0.9, 1);
+    //Delay_Init(500.0, 0.9, 0.7, 1);
+    //Delay_Init(2500.0, 0.3, 0.3, 0.3);
+    Delay_Init(10000, 0.5, 0.2, .3);
     
     // Start the audio stream. PortAudio will then start calling our callback function
     // every time the soundcard needs audio.

@@ -29,7 +29,7 @@ float d_buffer[DELAY_MAX_BUF_SIZE];
 struct fract_delay {
     float d_mix; /* blend */
     short d_samples; /* delay duration in number of samples */
-    float d_fb; /* feedback volume */
+    float d_fb; /* feedback volume */ //d_fb and d_mix should probably sum to .5
     float d_fw; /* delay tap mix volume */
     float n_fract; /* fractional part of the delay */
     float *rdPtr; /* read pointer */
