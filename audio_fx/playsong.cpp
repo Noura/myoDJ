@@ -53,8 +53,16 @@
   #include <audiodecoder/audiodecoder.h> // libaudiodecoder
 #endif
 
+#include <myo/myo.hpp>
+#include "myo.h"
+
 // All audio will be handled as stereo.
 const int NUM_CHANNELS = 2;
+
+// Parameters for flanger effect
+#define FL_MAX_DELAY 0.010
+#define FL_RATE 0.1
+#define SAMP_RATE 44100
 
 // Declaration for audio callback called by PortAudio.
 int audioCallback(const void *input, void *output, 
@@ -62,29 +70,26 @@ int audioCallback(const void *input, void *output,
                   const PaStreamCallbackTimeInfo* timeInfo,
                   PaStreamCallbackFlags statusFlags,
                   void* userData);
-
 // Define a circular buffer
 struct CircularBuffer {
-	SAMPLE* data;
+	SAMPLE data[(int)(6 * FL_MAX_DELAY * SAMP_RATE * NUM_CHANNELS)];
 	int writePos;
 	int readPos;
 	int nElems;
 	int len;
 	int fl_n;
 };
+CircularBuffer cbuf;
 
+// Data collector for the Myo bracelet
+DataCollector collector;
 
-// Parameters for flanger effect
-#define FL_MAX_DELAY 0.010
-#define FL_RATE 0.01
-#define FL_DELAY_GAIN 0.4
-#define SAMP_RATE 44100
 
 int main (int argc, char * const argv[]) {
 
     // Initialize an AudioDecoder object and open demo.mp3
     #ifdef _WIN32
-		char* filename = "living.mp3";
+		char* filename = "dancing.m4a";
 	#else
 		std::string filename = "/Users/noura/myo DJ/playsong/demo.mp3";
 	#endif
@@ -105,9 +110,7 @@ int main (int argc, char * const argv[]) {
     PaStream* pStream = NULL;
     
 	// Create and initialize the circular buffer
-	CircularBuffer cbuf;
-	cbuf.data = new SAMPLE[(int)(10 * FL_MAX_DELAY * SAMP_RATE * NUM_CHANNELS)];
-	cbuf.len = (int)(10 * FL_MAX_DELAY * SAMP_RATE * NUM_CHANNELS);
+	cbuf.len = (int)(6 * FL_MAX_DELAY * SAMP_RATE * NUM_CHANNELS);
 	cbuf.writePos = 0;
 	cbuf.nElems = 0;
 	cbuf.readPos = 0;
@@ -126,7 +129,29 @@ int main (int argc, char * const argv[]) {
         std::cerr << "Failed to open the default PortAudio stream." << std::endl;
         return 1;
     }
-    
+
+    // First, we create a Hub with our application identifier. Be sure not to use the com.example namespace when
+    // publishing your application. The Hub provides access to one or more Myos.
+    myo::Hub hub("com.example.flanger_fx");
+    std::cout << "Attempting to find a Myo..." << std::endl;
+        
+    // Next, we attempt to find a Myo to use. If a Myo is already paired in Myo Connect, this will return that Myo
+    // immediately.
+    myo::Myo* myo = hub.waitForMyo(10000);
+        
+    // If waitForAnyMyo() returned a null pointer, we failed to find a Myo, so exit with an error message.
+    if (!myo) {
+        std::cout << "Unable to find a Myo!" << std::endl;
+		return -1;
+    }
+
+    // We've found a Myo.
+    std::cout << "Connected to a Myo armband!" << std::endl << std::endl;
+        
+    // Hub::addListener() takes the address of any object whose class inherits from DeviceListener, and will cause
+    // Hub::run() to send events to all registered device listeners.
+    hub.addListener(&collector);
+ 
 	// A loop that runs until the song finishes. We check if the buffer needs more samples,
 	// and if so, we read more from the MP3 file. We try keep at least 600ms of samples in
 	// the buffer
@@ -162,8 +187,12 @@ int main (int argc, char * const argv[]) {
 		if(numSampsRead == 0)
 			songFinished = true;
 
-		// Sleep for a bit
-		Sleep(1);
+		// Run the Myo event loop for a set number of milliseconds.
+        hub.run(5);
+
+        // After processing events, we call the print() member function we defined above to print out the values we've
+        // obtained from any events that have occurred.
+        collector.print();
 	}
    
     // Shutdown:
@@ -212,10 +241,13 @@ int audioCallback(const void *input, void *output,
 	// The result of the processing is written directly to the output buffer
 	for(int i = 0; i < frameCount * NUM_CHANNELS; i++)
 	{
+		// Calculate the audio fx params from the Myo params
+		float fl_mix = min( max(collector.my_yaw / 40.0, 0.0), 1.0);
+		float vol = max(collector.my_pitch / 40.0, 0.0);
+
 		// Compute the flanger delay
 		// Delay = MAX_DELAY/2 * (1 - cos(2pi * deviation_rate * n)
 		float delay = (FL_MAX_DELAY * SAMP_RATE) / 2.0 * (1.0 - cos(2.0*M_PI * FL_RATE / SAMP_RATE * cbuf->fl_n));
-		//std::cout << delay << std::endl;
 		float frac_delay = delay - floor(delay);
 		cbuf->fl_n++;
 		if(cbuf->fl_n == (int)(SAMP_RATE / FL_RATE))
@@ -228,16 +260,18 @@ int audioCallback(const void *input, void *output,
 		int delay_idx2 = (base_idx - (int)(ceil (delay)) * NUM_CHANNELS);
 		if(delay_idx2 < 0) delay_idx2 += cbuf->len;
 
-		//std::cout << base_idx << " " << delay_idx1 << " " << delay_idx2 << std::endl;
+		// Compute the original and delayed sample, using interpolation
+		float this_samp = cbuf->data[base_idx] * (1 - fl_mix);
+		float delayed_samp = ( cbuf->data[delay_idx1]*(1-frac_delay) + cbuf->data[delay_idx2]*frac_delay ) * fl_mix;
 
-		float this_samp = cbuf->data[base_idx] * (1 - FL_DELAY_GAIN);
-		float delayed_samp = ( cbuf->data[delay_idx1]*(1-frac_delay) + cbuf->data[delay_idx2]*frac_delay ) * FL_DELAY_GAIN;
+		// Adjust the volume
+		SAMPLE final_samp = (this_samp + delayed_samp) * vol;
 
-		(static_cast<SAMPLE*>(output))[i] = this_samp + delayed_samp;
-
+		// Store the sample
+		(static_cast<SAMPLE*>(output))[i] = final_samp;
 		cbuf->readPos = (cbuf->readPos + 1) % cbuf->len;
 	}
-    
+   
 	cbuf->nElems -= frameCount * NUM_CHANNELS;
 	return paContinue;
 }
