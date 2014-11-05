@@ -69,7 +69,7 @@ void DataCollector::onPose(myo::Myo* myo, uint64_t timestamp, myo::Pose pose)
     std::string poseString = currentPose.toString();
   
     std::cout << poseString << std::endl;
-    return; // do not want gestures
+
   if (pose == myo::Pose::fist) {
     system("afplay /Users/noura/myoDJ/media/buzzer_x.wav &");
     
