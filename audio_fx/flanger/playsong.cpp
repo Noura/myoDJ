@@ -57,6 +57,7 @@
 #include "../myo.h"
 
 #define MIN(a, b) ( a < b ? a : b)
+#define MAX(a, b) ( a > b ? a : b)
 
 
 // All audio will be handled as stereo.
@@ -222,7 +223,6 @@ int main (int argc, char * const argv[]) {
     
     // Close the AudioDecoder object and free it.
     delete pAudioDecoder;
-	delete cbuf.data;
     
     return 0;
 }
@@ -252,8 +252,8 @@ int audioCallback(const void *input, void *output,
 	for(int i = 0; i < frameCount * NUM_CHANNELS; i++)
 	{
 		// Calculate the audio fx params from the Myo params
-		float fl_mix = min( max(collector.my_yaw / 40.0, 0.0), 1.0);
-		float vol = max(collector.my_pitch / 40.0, 0.0);
+		float fl_mix = MIN( MAX(collector.my_yaw / 40.0, 0.0), 1.0);
+		float vol = MAX(collector.my_pitch / 40.0, 0.0);
 
 		// Compute the flanger delay
 		// Delay = MAX_DELAY/2 * (1 - cos(2pi * deviation_rate * n)
