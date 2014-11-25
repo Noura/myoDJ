@@ -59,8 +59,12 @@ void DataCollector::onOrientationData(myo::Myo* myo, uint64_t timestamp, const m
     pitch_w = static_cast<int>((pitch + (float)M_PI/2.0f)/M_PI * 18);
     yaw_w = static_cast<int>((yaw + (float)M_PI)/(M_PI * 2.0f) * 18);
   
-    my_pitch = static_cast<int>((-pitch + (float)M_PI/2.0f)/M_PI * 127);	// 0 down, 64 horiz, 127 up
-    //my_pitch = static_cast<int>(max(-pitch, 0.0) / (M_PI/2.0f) * 127);	// 0 horiz, 127 up
+	//-45 deg down = 0, horiz = 64, 45 deg up = 127
+	float pitch_ang_limited = max(min(-pitch, (float)M_PI/4.0f), -(float)M_PI/4.0f);
+    my_pitch = static_cast<int>((pitch_ang_limited + (float)M_PI/4.0f)/ (M_PI/2.0f) * 127);	
+
+	// 0 horiz, 127 up
+    //my_pitch = static_cast<int>(max(-pitch, 0.0) / (M_PI/2.0f) * 127);	
 
     my_yaw = static_cast<int>((yaw + (float)M_PI)/(M_PI * 2.0f) * 100) - 50;
 	if(my_yaw < 0)
