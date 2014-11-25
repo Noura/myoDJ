@@ -1,0 +1,36 @@
+#N canvas 946 387 451 445 10;
+#X obj 39 52 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 235 92 metro 500;
+#X obj 236 118 random 80;
+#X floatatom 236 152 5 0 0 0 - - -;
+#X obj 236 183 + 10;
+#X msg 17 213 127;
+#X text 64 48 start;
+#X text 310 91 each 500 ms;
+#X text 305 117 random number b/w 0 and 80;
+#X text 46 213 velocity;
+#X msg 64 181 320;
+#X text 91 180 duration;
+#X obj 127 248 makenote;
+#X floatatom 111 285 5 0 0 0 - - -;
+#X floatatom 158 286 5 0 0 0 - - -;
+#X obj 139 325 noteout;
+#X msg 203 287 2;
+#X text 100 375 thanks to http://en.flossmanuals.net/pure-data/midi/using-midi/
+;
+#X connect 0 0 1 0;
+#X connect 0 0 5 0;
+#X connect 0 0 10 0;
+#X connect 0 0 16 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 3 0 4 0;
+#X connect 4 0 12 0;
+#X connect 5 0 12 1;
+#X connect 10 0 12 2;
+#X connect 12 0 13 0;
+#X connect 12 1 14 0;
+#X connect 13 0 15 0;
+#X connect 14 0 15 1;
+#X connect 16 0 15 2;
