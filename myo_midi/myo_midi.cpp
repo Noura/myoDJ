@@ -118,16 +118,16 @@ int main( void )
 	while(1)
 	{
 		// Run the Myo event loop for a set number of milliseconds.
-        //hub.run(5);
+        hub.run(5);
 
 		// Check if the user made a hand gesture to toggle hand tracking
-		//if(collector.fingersHaveSpread())
-		//	tracking = !tracking;
+		if(collector.fingersHaveSpread())
+			tracking = !tracking;
 
 		// Only send the latest arm pitch if we are currently tracking
 		if(tracking)
 		{
-			int new_pitch = 0; //collector.my_pitch;
+			int new_pitch = collector.my_pitch;
 			if(new_pitch != old_pitch)
 			{
 				message.clear();
