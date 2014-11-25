@@ -9,9 +9,34 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>MyoMidiApp.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>14699BD01A24132E0078DEAF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>14699BE21A24132E0078DEAF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>14699BF41A2413E70078DEAF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>14699C061A2413E70078DEAF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>14DDCBE01A240B57003EB093</key>
 		<dict>
 			<key>primary</key>
