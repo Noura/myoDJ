@@ -32,7 +32,10 @@ void setup() {
   // or for testing you could ...
   //                 Parent  In        Out
   //                   |     |          |
-  myBus = new MidiBus(this, "To Processing", -1);  // default Java Sound Synthesizer as the output device.
+<<<<<<< HEAD
+  
+  myBus = new MidiBus(this, "To Processing", -1); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
+  //myBus = new MidiBus(this, "LoopBe Internal MIDI", -1); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
 }
 
 void draw() {

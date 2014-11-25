@@ -1,0 +1,20 @@
+MIDI Messages
+
+Myo to Processing and Processing to Myo
+Tracking on (enable) - Chan 1, note 0, on
+Tracking off (disable) - Chan 1, note 0, off
+
+Myo to Processing
+Arm position/pitch - control change, channel 0, continuous controller 12
+
+Processing to Myo
+Effect 1 - Chan 1, note 1, on
+Effect 2 - Chan 1, note 2, on
+Effect 3 - Chan 1, note 3, on
+Effect 4 - Chan 1, note 4, on
+
+Myo to Serato
+Effect 1 amount - control change, channel 0, continuous controller 16
+Effect 2 amount - control change, channel 0, continuous controller 17
+Effect 3 amount - control change, channel 0, continuous controller 18
+Effect 4 amount - control change, channel 0, continuous controller 19
