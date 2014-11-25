@@ -162,6 +162,7 @@
 		142A7A261A240881005F43E4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = __MACOSX_CORE__;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
 			};
 			name = Debug;
@@ -169,6 +170,7 @@
 		142A7A271A240881005F43E4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = __MACOSX_CORE__;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
 			};
 			name = Release;
