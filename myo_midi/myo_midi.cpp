@@ -78,7 +78,7 @@ int main( void )
 
     // First, we create a Hub with our application identifier. Be sure not to use the com.example namespace when
     // publishing your application. The Hub provides access to one or more Myos.
-    myo::Hub hub("com.my_midi");
+    myo::Hub hub("com.example.my_midi");
     std::cout << "Attempting to find a Myo..." << std::endl;
         
     // Next, we attempt to find a Myo to use. If a Myo is already paired in Myo Connect, this will return that Myo
@@ -118,16 +118,16 @@ int main( void )
 	while(1)
 	{
 		// Run the Myo event loop for a set number of milliseconds.
-        hub.run(5);
+        //hub.run(5);
 
 		// Check if the user made a hand gesture to toggle hand tracking
-		if(collector.fingersHaveSpread())
-			tracking = !tracking;
+		//if(collector.fingersHaveSpread())
+		//	tracking = !tracking;
 
 		// Only send the latest arm pitch if we are currently tracking
 		if(tracking)
 		{
-			int new_pitch = collector.my_pitch;
+			int new_pitch = 0; //collector.my_pitch;
 			if(new_pitch != old_pitch)
 			{
 				message.clear();
