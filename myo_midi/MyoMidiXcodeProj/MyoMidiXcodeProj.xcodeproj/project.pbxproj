@@ -6,10 +6,23 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXFileReference section */
+		142A7A281A2408BD005F43E4 /* myo_midi.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = myo_midi.cpp; path = ../myo_midi.cpp; sourceTree = "<group>"; };
+		142A7A291A2408BD005F43E4 /* myo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = myo.cpp; path = ../myo.cpp; sourceTree = "<group>"; };
+		142A7A2A1A2408BD005F43E4 /* myo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = myo.h; path = ../myo.h; sourceTree = "<group>"; };
+		142A7A2B1A2408BD005F43E4 /* RtMidi.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RtMidi.cpp; path = ../RtMidi.cpp; sourceTree = "<group>"; };
+		142A7A2C1A2408BD005F43E4 /* RtMidi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RtMidi.h; path = ../RtMidi.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
 /* Begin PBXGroup section */
 		142A7A211A240881005F43E4 = {
 			isa = PBXGroup;
 			children = (
+				142A7A281A2408BD005F43E4 /* myo_midi.cpp */,
+				142A7A291A2408BD005F43E4 /* myo.cpp */,
+				142A7A2A1A2408BD005F43E4 /* myo.h */,
+				142A7A2B1A2408BD005F43E4 /* RtMidi.cpp */,
+				142A7A2C1A2408BD005F43E4 /* RtMidi.h */,
 			);
 			sourceTree = "<group>";
 		};
