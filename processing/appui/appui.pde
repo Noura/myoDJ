@@ -92,6 +92,13 @@ void draw() {
 
 }
 
+void keyPressed() {
+  int i = int(str(key)) - 1;
+  if (i >= 0 && i < fx.size()) {
+     fx_chosen = i; 
+  }
+}
+
 void noteOn(int channel, int pitch, int velocity) {
   // Receive a noteOn
   println();
