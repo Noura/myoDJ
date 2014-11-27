@@ -16,7 +16,8 @@ int myoin = 0;
 ArrayList<String> fx;
 int fxrow_h = 50;
 int menu_h;
-color text_color, row_color;
+color text_color, row_color, chosen_row_color;
+int fx_chosen = 0;
 
 void setup() {
   size(300, 800);
@@ -37,6 +38,7 @@ void setup() {
   menu_h = fx.size() * fxrow_h;
   text_color = color(225, 225, 225);
   row_color = color(50, 50, 50);
+  chosen_row_color = color(100, 100, 100);
   
   // MIDI setup
   MidiBus.list(); // List all available Midi devices on STDOUT. This will show each device's index and name.
@@ -75,12 +77,16 @@ void draw() {
   
   // menu
   int row_y = h;
+  strokeWeight(0);
   for (int i = 0; i < fx.size(); i++) {
-    strokeWeight(0);
-    fill(row_color);
+    if (fx_chosen == i) {
+      fill(chosen_row_color);
+    } else {
+      fill(row_color);
+    }
     rect(0, row_y, width, row_y + fxrow_h);
     fill(text_color);
-    text(str(i) + " - " + fx.get(i), 2, row_y + fxrow_h/2);
+    text(str(i + 1) + " - " + fx.get(i), 2, row_y + fxrow_h/2);
     row_y += fxrow_h;
   }
 
