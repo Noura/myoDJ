@@ -78,13 +78,18 @@ void draw() {
   setGradient(0, 0, width, h, gradient_top_color, gradient_bot_color, Y_AXIS);
   
   // slider position
-  strokeWeight(5);
-  stroke(0);
-  fill(0, 0, 0, 0);
   int y = int(map(myoin, 0, 127, h, 0));
-  line(0, y, width/2 - diameter/2, y);
-  ellipse(width/2, y, diameter, diameter);
-  line(width/2 + diameter/2, y, width, y);
+  // line and circle slider
+//    strokeWeight(5);
+//    stroke(0);
+//    fill(0, 0, 0, 0);
+//  line(0, y, width/2 - diameter/2, y);
+//  ellipse(width/2, y, diameter, diameter);
+//  line(width/2 + diameter/2, y, width, y);
+  // bar slider
+  strokeWeight(0);
+  fill(0);
+  rect(0, 0, width, y);
   
   // menu
   int row_y = h;
