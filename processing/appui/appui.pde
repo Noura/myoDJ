@@ -143,7 +143,9 @@ void noteOff(int channel, int pitch, int velocity) {
 }
 
 void controllerChange(int channel, int number, int value) {
-  myoin = value;
+  if (active) {
+    myoin = value;
+  }
   // Receive a controllerChange
   println();
   println("Controller Change:");
