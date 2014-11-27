@@ -1,10 +1,15 @@
 import themidibus.*;
 MidiBus myBus;
 
+// SETTINGS ////////////////////////////////////////////////
+// activate/deactivate key
+char TOGGLE_KEY = 'm';
+color inactive_veil_color;
+
 // gradient settings
 int Y_AXIS = 1;
 int X_AXIS = 2;
-color active_bot, active_top, inactive_bot, inactive_top;
+color gradient_bot_color, gradient_top_color;
 
 // myo in settings
 int diameter = 50;
@@ -17,23 +22,29 @@ ArrayList<String> fx;
 int fxrow_h = 50;
 int menu_h;
 color text_color, row_color, chosen_row_color;
+///////////////////////////////////////////////////////////////
+
+// INTERNAL APP STATE /////////////////////////////////////////
 int fx_chosen = 0;
+boolean active = true;
 
 void setup() {
   size(300, 800);
   
-  // gradient settings
-  active_bot = color(255);
-  active_top = color(150, 0, 255);
-  inactive_bot = color(230);
-  inactive_top = color(50, 0, 50);
+  // MORE SETTINGS ///////////////////////////////////////////
+  inactive_veil_color = color(100, 100, 100, 100);
+
+  // gradient
+  gradient_bot_color = color(255);
+  gradient_top_color = color(150, 0, 255);
   
-  // effects menu setup
+  // effects menu
   fx = new ArrayList<String>();
   fx.add("Reverb");
   fx.add("Distort");
   fx.add("Flanger");
   fx.add("Phaser");
+  /////////////////////////////////////////////////////////////
   
   menu_h = fx.size() * fxrow_h;
   text_color = color(225, 225, 225);
@@ -64,7 +75,7 @@ void setup() {
 void draw() {
   int h = height - menu_h;
   
-  setGradient(0, 0, width, h, active_top, active_bot, Y_AXIS);
+  setGradient(0, 0, width, h, gradient_top_color, gradient_bot_color, Y_AXIS);
   
   // slider position
   strokeWeight(5);
@@ -89,14 +100,26 @@ void draw() {
     text(str(i + 1) + " - " + fx.get(i), 2, row_y + fxrow_h/2);
     row_y += fxrow_h;
   }
-
+  
+  if (!active) {
+    strokeWeight(0);
+    fill(inactive_veil_color);
+    rect(0, 0, width, height); 
+  }
 }
 
 void keyPressed() {
+  // pressing number keys chooses an effect
   int i = int(str(key)) - 1;
   if (i >= 0 && i < fx.size()) {
-     fx_chosen = i; 
+     fx_chosen = i;
+     return;
   }
+  
+  if (key == TOGGLE_KEY) {
+    active = !active;
+    return;
+  } 
 }
 
 void noteOn(int channel, int pitch, int velocity) {
