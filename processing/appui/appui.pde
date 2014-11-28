@@ -4,6 +4,7 @@ MidiBus myBus;
 // SETTINGS ////////////////////////////////////////////////
 // activate/deactivate key
 char TOGGLE_KEY = 'm';
+int SLIDER_CHANNEL = 0;
 color inactive_veil_color;
 
 // gradient settings
@@ -148,16 +149,10 @@ void noteOff(int channel, int pitch, int velocity) {
 }
 
 void controllerChange(int channel, int number, int value) {
-  if (active) {
+  if (channel == SLIDER_CHANNEL && active) {
     myoin = value;
+    println("Controller Change channel " + channel + " number " + number + " value " + value);
   }
-  // Receive a controllerChange
-  println();
-  println("Controller Change:");
-  println("--------");
-  println("Channel:"+channel);
-  println("Number:"+number);
-  println("Value:"+value);
 }
 
 void setGradient(int x, int y, float w, float h, color c1, color c2, int axis ) {
