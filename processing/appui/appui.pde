@@ -4,6 +4,7 @@ MidiBus myBus;
 // SETTINGS ////////////////////////////////////////////////
 // activate/deactivate key
 char TOGGLE_KEY = 'm';
+int TOGGLE_CHANNEL = 1;
 int SLIDER_CHANNEL = 0;
 color inactive_veil_color;
 
@@ -129,13 +130,10 @@ void keyPressed() {
 }
 
 void noteOn(int channel, int pitch, int velocity) {
-  // Receive a noteOn
-  println();
-  println("Note On:");
-  println("--------");
-  println("Channel:"+channel);
-  println("Pitch:"+pitch);
-  println("Velocity:"+velocity);
+  if (channel == TOGGLE_CHANNEL && pitch == 0) {
+    active = !active;
+    println("Note On channel " + channel + " pitch " + pitch + " velocity " + velocity);
+  }
 }
 
 void noteOff(int channel, int pitch, int velocity) {
