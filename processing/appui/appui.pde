@@ -17,17 +17,17 @@ color gradient_bot_color, gradient_top_color;
 int diameter = 50;
 int myoin_max = 127;
 int myoin_min = 0;
-int myoin = 0;
 
 // menu of effects choices
-ArrayList<String> fx;
 int fxrow_h = 50;
 int menu_h;
 color text_color, row_color, chosen_row_color;
 ///////////////////////////////////////////////////////////////
 
 // INTERNAL APP STATE /////////////////////////////////////////
-int fx_chosen = 0;
+ArrayList<String> fx;
+int fx_chosen = 0; // index in fx
+int[] myoins = new int[100];
 boolean active = true;
 
 void setup() {
@@ -80,7 +80,7 @@ void draw() {
   setGradient(0, 0, width, h, gradient_top_color, gradient_bot_color, Y_AXIS);
   
   // slider position
-  int y = int(map(myoin, 0, 127, h, 0));
+  int y = int(map(myoins[fx_chosen], 0, 127, h, 0));
   // line and circle slider
 //    strokeWeight(5);
 //    stroke(0);
@@ -148,7 +148,7 @@ void noteOff(int channel, int pitch, int velocity) {
 
 void controllerChange(int channel, int number, int value) {
   if (channel == SLIDER_CHANNEL && active) {
-    myoin = value;
+    myoins[fx_chosen] = value;
     println("Controller Change channel " + channel + " number " + number + " value " + value);
   }
 }
