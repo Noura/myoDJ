@@ -5,6 +5,7 @@ MidiBus myBus;
 // activate/deactivate key
 char TOGGLE_KEY = 'm';
 int TOGGLE_CHANNEL = 1;
+int FX_CHANNEL = 1;
 int SLIDER_CHANNEL = 0;
 color inactive_veil_color;
 
@@ -120,6 +121,7 @@ void keyPressed() {
   int i = int(str(key)) - 1;
   if (i >= 0 && i < fx.size()) {
      fx_chosen = i;
+     myBus.sendNoteOn(FX_CHANNEL, fx_chosen + 1, 100);
      return;
   }
   
@@ -132,15 +134,15 @@ void keyPressed() {
 
 void noteOn(int channel, int pitch, int velocity) {
   println("Note On channel " + channel + " pitch " + pitch + " velocity " + velocity);
-  toggleActive(channel, pitch, velocity);
+  toggleActiveFromMidi(channel, pitch, velocity);
 }
 
 void noteOff(int channel, int pitch, int velocity) {
   println("Note Off channel " + channel + " pitch " + pitch + " velocity " + velocity);
-  toggleActive(channel, pitch, velocity);
+  toggleActiveFromMidi(channel, pitch, velocity);
 }
 
-void toggleActive(int channel, int pitch, int velocity) {
+void toggleActiveFromMidi(int channel, int pitch, int velocity) {
   if (channel == TOGGLE_CHANNEL && pitch == 0) {
     active = !active;
   }
