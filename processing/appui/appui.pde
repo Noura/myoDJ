@@ -70,7 +70,7 @@ void setup() {
   //                 Parent  In        Out
   //                   |     |          |
   
-  myBus = new MidiBus(this, "To Processing", -1); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
+  myBus = new MidiBus(this, "pd to processing", "processing to pd"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
   //myBus = new MidiBus(this, "LoopBe Internal MIDI", -1); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
 }
 
@@ -125,31 +125,31 @@ void keyPressed() {
   
   if (key == TOGGLE_KEY) {
     active = !active;
+    myBus.sendNoteOn(TOGGLE_CHANNEL, 0, 100);
     return;
   } 
 }
 
 void noteOn(int channel, int pitch, int velocity) {
-  if (channel == TOGGLE_CHANNEL && pitch == 0) {
-    active = !active;
-    println("Note On channel " + channel + " pitch " + pitch + " velocity " + velocity);
-  }
+  println("Note On channel " + channel + " pitch " + pitch + " velocity " + velocity);
+  toggleActive(channel, pitch, velocity);
 }
 
 void noteOff(int channel, int pitch, int velocity) {
-  // Receive a noteOff
-  println();
-  println("Note Off:");
-  println("--------");
-  println("Channel:"+channel);
-  println("Pitch:"+pitch);
-  println("Velocity:"+velocity);
+  println("Note Off channel " + channel + " pitch " + pitch + " velocity " + velocity);
+  toggleActive(channel, pitch, velocity);
+}
+
+void toggleActive(int channel, int pitch, int velocity) {
+  if (channel == TOGGLE_CHANNEL && pitch == 0) {
+    active = !active;
+  }
 }
 
 void controllerChange(int channel, int number, int value) {
+    println("Controller Change channel " + channel + " number " + number + " value " + value);
   if (channel == SLIDER_CHANNEL && active) {
     myoins[fx_chosen] = value;
-    println("Controller Change channel " + channel + " number " + number + " value " + value);
   }
 }
 

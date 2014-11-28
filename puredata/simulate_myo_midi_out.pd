@@ -1,6 +1,6 @@
-#N canvas 937 452 497 249 10;
+#N canvas 937 452 497 271 10;
 #X obj 17 41 hsl 128 15 0 127 0 0 empty empty empty -2 -8 0 10 -262144
--1 -1 9500 1;
+-1 -1 8300 1;
 #X floatatom 14 73 5 0 0 0 - - -;
 #X obj 15 103 ctlout 12 0;
 #X text 12 15 send slider values;
@@ -11,6 +11,13 @@
 #X obj 188 100 noteout;
 #X msg 204 71 100;
 #X msg 238 72 2;
+#X obj 17 164 notein;
+#X floatatom 18 201 5 0 0 0 - - -;
+#X floatatom 61 200 5 0 0 0 - - -;
+#X floatatom 103 201 5 0 0 0 - - -;
+#X text 18 219 note;
+#X text 62 218 vel;
+#X text 102 220 channel;
 #X connect 0 0 1 0;
 #X connect 1 0 2 0;
 #X connect 4 0 6 0;
@@ -19,3 +26,6 @@
 #X connect 6 0 7 0;
 #X connect 8 0 7 1;
 #X connect 9 0 7 2;
+#X connect 10 0 11 0;
+#X connect 10 1 12 0;
+#X connect 10 2 13 0;
