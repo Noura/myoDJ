@@ -82,14 +82,6 @@ void draw() {
   
   // slider position
   int y = int(map(myoins[fx_chosen], 0, 127, h, 0));
-  // line and circle slider
-//    strokeWeight(5);
-//    stroke(0);
-//    fill(0, 0, 0, 0);
-//  line(0, y, width/2 - diameter/2, y);
-//  ellipse(width/2, y, diameter, diameter);
-//  line(width/2 + diameter/2, y, width, y);
-  // bar slider
   strokeWeight(0);
   fill(0);
   rect(0, 0, width, y);
