@@ -5,7 +5,7 @@ Tracking on (enable) - Chan 1, note 0, on
 Tracking off (disable) - Chan 1, note 0, off
 
 Myo to Processing
-Arm position/pitch - control change, channel 0, continuous controller 12
+Arm position/pitch - control change, channel 1, continuous controller 12
 
 Processing to Myo
 Effect 1 - Chan 1, note 1, on
