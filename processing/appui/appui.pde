@@ -21,6 +21,8 @@ int myoin_min = 0;
 
 // menu of effects choices
 int fxrow_h = 50;
+int text_left_indent = 10;
+int text_top_indent = 5;
 int menu_h;
 color text_color, row_color, chosen_row_color;
 ///////////////////////////////////////////////////////////////
@@ -89,6 +91,7 @@ void draw() {
   // menu
   int row_y = h;
   strokeWeight(0);
+  textSize(20);
   for (int i = 0; i < fx.size(); i++) {
     if (fx_chosen == i) {
       fill(chosen_row_color);
@@ -97,7 +100,7 @@ void draw() {
     }
     rect(0, row_y, width, row_y + fxrow_h);
     fill(text_color);
-    text(str(i + 1) + " - " + fx.get(i), 2, row_y + fxrow_h/2);
+    text(str(i + 1) + " - " + fx.get(i), text_left_indent, row_y + fxrow_h/2 + text_top_indent);
     row_y += fxrow_h;
   }
   
