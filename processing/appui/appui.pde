@@ -6,7 +6,7 @@ MidiBus myBus;
 char TOGGLE_KEY = 'm';
 int TOGGLE_CHANNEL = 1;
 int FX_CHANNEL = 1;
-int SLIDER_CHANNEL = 0;
+int SLIDER_CHANNEL = 1;
 color inactive_veil_color;
 
 // gradient settings
@@ -72,7 +72,7 @@ void setup() {
   //                   |     |          |
   
   myBus = new MidiBus(this, "pd to processing", "processing to pd"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
-  //myBus = new MidiBus(this, "LoopBe Internal MIDI", -1); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
+  //myBus = new MidiBus(this, "Myo to Processing", "Processing to Myo"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
 }
 
 void draw() {
@@ -127,7 +127,10 @@ void keyPressed() {
   
   if (key == TOGGLE_KEY) {
     active = !active;
-    myBus.sendNoteOn(TOGGLE_CHANNEL, 0, 100);
+    if(active)
+      myBus.sendNoteOn(TOGGLE_CHANNEL, 0, 100);
+    else
+      myBus.sendNoteOff(TOGGLE_CHANNEL, 0, 100);
     return;
   } 
 }
