@@ -12,7 +12,8 @@ color inactive_veil_color;
 // gradient settings
 int Y_AXIS = 1;
 int X_AXIS = 2;
-color gradient_bot_color, gradient_top_color;
+color gradient_bot_color;
+color[] gradient_top_color = new color[100];
 
 // myo in settings
 int diameter = 50;
@@ -41,14 +42,17 @@ void setup() {
 
   // gradient
   gradient_bot_color = color(255);
-  gradient_top_color = color(150, 0, 255);
   
   // effects menu
   fx = new ArrayList<String>();
   fx.add("Reverb");
+  gradient_top_color[0] = color(150, 0, 255);
   fx.add("Distort");
+  gradient_top_color[1] = color(255, 255, 0);
   fx.add("Flanger");
+  gradient_top_color[2] = color(0, 255, 100);
   fx.add("Phaser");
+  gradient_top_color[3] = color(0, 100, 255);
   /////////////////////////////////////////////////////////////
   
   menu_h = fx.size() * fxrow_h;
@@ -80,7 +84,7 @@ void setup() {
 void draw() {
   int h = height - menu_h;
   
-  setGradient(0, 0, width, h, gradient_top_color, gradient_bot_color, Y_AXIS);
+  setGradient(0, 0, width, h, gradient_top_color[fx_chosen], gradient_bot_color, Y_AXIS);
   
   // slider position
   int y = int(map(myoins[fx_chosen], 0, 127, h, 0));
