@@ -83,7 +83,7 @@ void DataCollector::onPose(myo::Myo* myo, uint64_t timestamp, myo::Pose pose)
     std::cout << poseString << std::endl;
 
 	// Check if the user has spread their fingers apart
-	if(pose == myo::Pose::fingersSpread)
+	if(pose == myo::Pose::waveIn)
 		fingersSpread = true;
 
     return;
@@ -91,7 +91,7 @@ void DataCollector::onPose(myo::Myo* myo, uint64_t timestamp, myo::Pose pose)
 
 
 // fingersSpread() returns true if the user has spread their fingers apart at least once since this function was last called.
-bool DataCollector::fingersHaveSpread()
+bool DataCollector::trackingGestureMade()
 {
 	bool ret = fingersSpread;
 	fingersSpread = false;

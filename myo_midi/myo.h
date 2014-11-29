@@ -33,7 +33,7 @@ public:
     void onPose(myo::Myo* myo, uint64_t timestamp, myo::Pose pose);
 
 	// fingersSpread() returns true if the user has spread their fingers apart at least once since this function was last called.
-	bool fingersHaveSpread();
+	bool trackingGestureMade();
 
     // onArmRecognized() is called whenever Myo has recognized a Sync Gesture after someone has put it on their
     // arm. This lets Myo know which arm it's on and which way it's facing.
