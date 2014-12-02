@@ -23,6 +23,7 @@ int myoin_min = 0;
 int fxrow_h = 50;
 int text_left_indent = 10;
 int text_top_indent = 5;
+int text_size = 28;
 int menu_h;
 color text_color, row_color, chosen_row_color;
 ///////////////////////////////////////////////////////////////
@@ -73,8 +74,8 @@ void setup() {
   //                 Parent  In        Out
   //                   |     |          |
   
-  myBus = new MidiBus(this, "pd to processing", "processing to pd"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
-  //myBus = new MidiBus(this, "Myo to Processing", "Processing to Myo"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
+  //myBus = new MidiBus(this, "pd to processing", "processing to pd"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
+  myBus = new MidiBus(this, "Myo to Processing", "Processing to Myo"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
 }
 
 void draw() {
@@ -100,7 +101,9 @@ void draw() {
     }
     rect(0, row_y, width, row_y + fxrow_h);
     fill(text_color);
+    textSize(text_size);
     text(str(i + 1) + " - " + fx.get(i), text_left_indent, row_y + fxrow_h/2 + text_top_indent);
+
     row_y += fxrow_h;
   }
   

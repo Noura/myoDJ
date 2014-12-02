@@ -239,6 +239,12 @@ int main( void )
 				// Send MIDI message on channel 1 to Serato
 				sendMIDIContinuousControl(midiOutSerato, 1, serato_cc_num, new_pitch);
 
+				// Switch the effect on/off in Serato too
+				if(new_pitch == 0)
+					sendMIDINote(midiOutSerato, false, 1, serato_cc_num, 100);
+				else
+					sendMIDINote(midiOutSerato, true, 1, serato_cc_num, 100);
+
 				// Send MIDI message on channel 1 to Processing to update display
 				sendMIDIContinuousControl(midiOutProc, 1, processing_cc_num, new_pitch);
 
