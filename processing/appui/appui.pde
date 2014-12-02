@@ -49,17 +49,17 @@ void setup() {
   fx.add("Reverb");
   gradient_top_color[0] = color(150, 0, 255);
   fx.add("Gater");
-  gradient_top_color[1] = color(255, 255, 0);
+  gradient_top_color[1] = color(0, 237, 130);
   fx.add("Flanger");
-  gradient_top_color[2] = color(0, 255, 100);
+  gradient_top_color[2] = color(255, 255, 0);
   fx.add("Crossfader");
-  gradient_top_color[3] = color(0, 100, 255);
+  gradient_top_color[3] = color(255, 0, 150);
   /////////////////////////////////////////////////////////////
   
   menu_h = fx.size() * fxrow_h;
-  text_color = color(225, 225, 225);
-  row_color = color(50, 50, 50);
-  chosen_row_color = color(100, 100, 100);
+  text_color = color(200, 200, 200);
+  row_color = color(50, 50, 50, 200);
+  chosen_row_color = color(255, 255, 255, 0);
   
   // MIDI setup
   MidiBus.list(); // List all available Midi devices on STDOUT. This will show each device's index and name.
@@ -98,6 +98,8 @@ void draw() {
   strokeWeight(0);
   textSize(text_size);
   for (int i = 0; i < fx.size(); i++) {
+    fill(gradient_top_color[i]);
+    rect(0, row_y, width, row_y + fxrow_h);
     if (fx_chosen == i) {
       fill(chosen_row_color);
     } else {
