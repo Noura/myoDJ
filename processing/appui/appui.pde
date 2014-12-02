@@ -22,7 +22,7 @@ int myoin_min = 0;
 // menu of effects choices
 int fxrow_h = 50;
 int text_left_indent = 10;
-int text_top_indent = 5;
+int text_top_indent = 8;
 int text_size = 28;
 int menu_h;
 color text_color, row_color, chosen_row_color;
@@ -47,9 +47,9 @@ void setup() {
   // effects menu
   fx = new ArrayList<String>();
   fx.add("Reverb");
-  fx.add("Distort");
+  fx.add("Gater");
   fx.add("Flanger");
-  fx.add("Phaser");
+  fx.add("Crossfader");
   /////////////////////////////////////////////////////////////
   
   menu_h = fx.size() * fxrow_h;
