@@ -14,7 +14,12 @@ Effect 3 - Chan 1, note 3, on
 Effect 4 - Chan 1, note 4, on
 
 Myo to Serato
-Effect 1 amount - control change, channel 0, continuous controller 16
-Effect 2 amount - control change, channel 0, continuous controller 17
-Effect 3 amount - control change, channel 0, continuous controller 18
-Effect 4 amount - control change, channel 0, continuous controller 19
+Effect 1 amount - control change, channel 1, continuous controller 16
+Effect 2 amount - control change, channel 1, continuous controller 17
+Effect 3 amount - control change, channel 1 continuous controller 18
+Effect 4 amount - control change, channel 1, continuous controller 19
+Effect 1 on/off - note on/off, channel 1, note 16, velocity 100
+Effect 2 on/off - note on/off, channel 1, note 17, velocity 100
+Effect 3 on/off - note on/off, channel 1, note 18, velocity 100
+Effect 4 on/off - note on/off, channel 1, note 19, velocity 100
+

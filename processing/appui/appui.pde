@@ -23,7 +23,8 @@ int myoin_min = 0;
 // menu of effects choices
 int fxrow_h = 50;
 int text_left_indent = 10;
-int text_top_indent = 5;
+int text_top_indent = 8;
+int text_size = 28;
 int menu_h;
 color text_color, row_color, chosen_row_color;
 ///////////////////////////////////////////////////////////////
@@ -47,11 +48,11 @@ void setup() {
   fx = new ArrayList<String>();
   fx.add("Reverb");
   gradient_top_color[0] = color(150, 0, 255);
-  fx.add("Distort");
+  fx.add("Gater");
   gradient_top_color[1] = color(255, 255, 0);
   fx.add("Flanger");
   gradient_top_color[2] = color(0, 255, 100);
-  fx.add("Phaser");
+  fx.add("Crossfader");
   gradient_top_color[3] = color(0, 100, 255);
   /////////////////////////////////////////////////////////////
   
@@ -77,8 +78,8 @@ void setup() {
   //                 Parent  In        Out
   //                   |     |          |
   
-  myBus = new MidiBus(this, "pd to processing", "processing to pd"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
-  //myBus = new MidiBus(this, "Myo to Processing", "Processing to Myo"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
+  //myBus = new MidiBus(this, "pd to processing", "processing to pd"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
+  myBus = new MidiBus(this, "Myo to Processing", "Processing to Myo"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
 }
 
 void draw() {
@@ -95,7 +96,7 @@ void draw() {
   // menu
   int row_y = h;
   strokeWeight(0);
-  textSize(20);
+  textSize(text_size);
   for (int i = 0; i < fx.size(); i++) {
     if (fx_chosen == i) {
       fill(chosen_row_color);
