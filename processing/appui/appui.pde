@@ -92,7 +92,7 @@ void draw() {
   // menu
   int row_y = h;
   strokeWeight(0);
-  textSize(20);
+  textSize(text_size);
   for (int i = 0; i < fx.size(); i++) {
     if (fx_chosen == i) {
       fill(chosen_row_color);
@@ -101,9 +101,7 @@ void draw() {
     }
     rect(0, row_y, width, row_y + fxrow_h);
     fill(text_color);
-    textSize(text_size);
     text(str(i + 1) + " - " + fx.get(i), text_left_indent, row_y + fxrow_h/2 + text_top_indent);
-
     row_y += fxrow_h;
   }
   
